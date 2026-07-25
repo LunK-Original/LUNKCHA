@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://s80go2vgksdq"]
+
+[ext_resource type="Script" uid="uid://b731ml5lyrayv" path="res://addons/Lunk_Character_Controller/node/script/first_person(platform)/first_person(platform).gd" id="1_5bpob"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y7ete"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_y7ete"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_huuin"]
+
+[node name="FirstPerson(platform)" type="CharacterBody3D" unique_id=971447844]
+script = ExtResource("1_5bpob")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1013904602]
+shape = SubResource("CapsuleShape3D_y7ete")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1730629369]
+mesh = SubResource("CapsuleMesh_y7ete")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=2083889601]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1783275381]
+shape = SubResource("CapsuleShape3D_huuin")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=685244561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8561957, 0)
+current = true

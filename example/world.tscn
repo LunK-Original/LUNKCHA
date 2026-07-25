@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://kw8ovq1qk74x"]
+
+[ext_resource type="PackedScene" uid="uid://dx1vvnekd54ck" path="res://addons/Lunk_Character_Controller/node/platform_2d.tscn" id="1_fj7yv"]
+[ext_resource type="Script" uid="uid://cuike1nydhy6" path="res://addons/Lunk_Character_Controller/node/script/platform_2d/platform.gd" id="2_tlwt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_huuin"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpsd8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cbimt"]
+albedo_color = Color(0.19506672, 0.19506672, 0.19506669, 1)
+albedo_texture_force_srgb = true
+albedo_texture_msdf = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_huuin"]
+material = SubResource("StandardMaterial3D_cbimt")
+
+[node name="World" type="Node2D" unique_id=1391223495]
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=1189565818]
+position = Vector2(-84, 497.00003)
+rotation = -2.878754
+scale = Vector2(44.348156, -1.6342698)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=261464215]
+shape = SubResource("RectangleShape2D_huuin")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D4" unique_id=1265828141]
+material = SubResource("ShaderMaterial_bpsd8")
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_huuin")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=617659097]
+position = Vector2(598, 615)
+scale = Vector2(-110.029144, 1.6342698)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=710835670]
+shape = SubResource("RectangleShape2D_huuin")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D" unique_id=743615622]
+material = SubResource("ShaderMaterial_bpsd8")
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_huuin")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1628297184]
+position = Vector2(669, 489)
+scale = Vector2(-5.949154, 1.6342698)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=644502126]
+shape = SubResource("RectangleShape2D_huuin")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D2" unique_id=1383279324]
+material = SubResource("ShaderMaterial_bpsd8")
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_huuin")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1503503018]
+position = Vector2(1154, 486)
+scale = Vector2(-5.949154, 1.6342698)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=542462264]
+shape = SubResource("RectangleShape2D_huuin")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D3" unique_id=143859518]
+material = SubResource("ShaderMaterial_bpsd8")
+scale = Vector2(20, 20)
+mesh = SubResource("BoxMesh_huuin")
+
+[node name="platform_2d" type="CharacterBody2D" parent="." unique_id=1371415050 instance=ExtResource("1_fj7yv")]
+script = ExtResource("2_tlwt5")

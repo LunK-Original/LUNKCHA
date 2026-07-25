@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://cnguvxd8olp7k"]
+
+[ext_resource type="Script" uid="uid://76j5kn046l5c" path="res://addons/Lunk_Character_Controller/node/script/ui/control.gd" id="1_mubrw"]
+[ext_resource type="Texture2D" uid="uid://d3ah0nlyc2ep0" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/header.png" id="2_lf6f6"]
+[ext_resource type="Texture2D" uid="uid://bq5onwv1w8xwp" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/line.png" id="3_ct788"]
+[ext_resource type="Texture2D" uid="uid://cew1mkwanv0xp" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/platform_2d_tombol.png" id="4_tjlth"]
+[ext_resource type="Texture2D" uid="uid://cqumggausmot2" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/menekan.png" id="5_twyuc"]
+[ext_resource type="Texture2D" uid="uid://i5gfql06m0bk" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/platform_2d_tombol_hover.png" id="6_lnhm0"]
+[ext_resource type="Texture2D" uid="uid://u3s4llgtx14e" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/first_person_platform_tombol.png" id="7_80gbd"]
+[ext_resource type="Texture2D" uid="uid://xn2r5v50o1er" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/first_person_platform_tombol_hover.png" id="8_k7xx7"]
+[ext_resource type="Texture2D" uid="uid://dwacgp4m5p0c1" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/third_person_platform_tombol.png" id="9_7t6jp"]
+[ext_resource type="Texture2D" uid="uid://cp0uxwddh05o1" path="res://addons/Lunk_Character_Controller/node/asset/2d/ui/third_person_platform_tombol_hover.png" id="10_gdwsj"]
+
+[node name="Control" type="Control" unique_id=1838095690]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mubrw")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=477772162]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(6.426723, 12.639996)
+color = Color(0.21518216, 0.21518219, 0.21518219, 1)
+
+[node name="CenterContainer3" type="CenterContainer" parent="." unique_id=1596860077]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 241.0
+offset_top = -19.999992
+offset_right = 264.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67999935, 0.7200003)
+
+[node name="TextureRect2" type="TextureRect" parent="CenterContainer3" unique_id=1183177978]
+layout_mode = 2
+texture = ExtResource("3_ct788")
+
+[node name="CenterContainer2" type="CenterContainer" parent="." unique_id=278927684]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 212.00003
+offset_top = -101.0
+offset_right = 212.0
+offset_bottom = -101.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67877215, 0.61090523)
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer2" unique_id=1505543986]
+layout_mode = 2
+texture = ExtResource("2_lf6f6")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1875643217]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = 67.0
+offset_right = -156.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7032694, 0.65521044)
+accessibility_region = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer" unique_id=1342965444]
+clip_contents = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/ScrollContainer" unique_id=1649938638]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/ScrollContainer/VBoxContainer" unique_id=188765624]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="platfrom_2d" type="TextureButton" parent="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1423899081]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("4_tjlth")
+texture_pressed = ExtResource("5_twyuc")
+texture_hover = ExtResource("6_lnhm0")
+
+[node name="first_person_platform_3d" type="TextureButton" parent="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1298441644]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("7_80gbd")
+texture_pressed = ExtResource("5_twyuc")
+texture_hover = ExtResource("8_k7xx7")
+
+[node name="third_person_platform_3d2" type="TextureButton" parent="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=265426440]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("9_7t6jp")
+texture_pressed = ExtResource("5_twyuc")
+texture_hover = ExtResource("10_gdwsj")
+
+[connection signal="button_down" from="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer/platfrom_2d" to="." method="_menekan_create_platform_2d"]
+[connection signal="button_down" from="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer/first_person_platform_3d" to="." method="_menekan_create_first_person_platform_3d"]
+[connection signal="button_down" from="CenterContainer/ScrollContainer/VBoxContainer/HBoxContainer/third_person_platform_3d2" to="." method="_menekan_create_third_person_platform_3d"]

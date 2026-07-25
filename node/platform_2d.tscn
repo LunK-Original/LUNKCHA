@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://dx1vvnekd54ck"]
+
+[ext_resource type="Script" uid="uid://cuike1nydhy6" path="res://addons/Lunk_Character_Controller/node/script/platform_2d/platform.gd" id="1_t6qm6"]
+[ext_resource type="Texture2D" uid="uid://cblvnhqbneu0e" path="res://addons/Lunk_Character_Controller/node/asset/2d/platform_2d/character_beige_front.png" id="2_50bob"]
+[ext_resource type="Texture2D" uid="uid://b0wxemrc01b6s" path="res://addons/Lunk_Character_Controller/node/asset/2d/platform_2d/character_beige_walk_a.png" id="3_uys3x"]
+[ext_resource type="Texture2D" uid="uid://dn6sa474iem68" path="res://addons/Lunk_Character_Controller/node/asset/2d/platform_2d/character_beige_walk_b.png" id="4_75jyu"]
+[ext_resource type="Texture2D" uid="uid://yd6aaa1o3ee" path="res://addons/Lunk_Character_Controller/node/asset/2d/platform_2d/character_beige_hit.png" id="4_pe15k"]
+[ext_resource type="Texture2D" uid="uid://bndc1ym2hueeb" path="res://addons/Lunk_Character_Controller/node/asset/2d/platform_2d/character_beige_jump.png" id="5_fn14i"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y7ete"]
+radius = 32.0
+height = 100.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_goveo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_fn14i")
+}],
+"loop": 1,
+"name": &"crouch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_50bob")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_pe15k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_pe15k")
+}],
+"loop": 1,
+"name": &"jatuh",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_fn14i")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_uys3x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_75jyu")
+}],
+"loop": 1,
+"name": &"turn",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4oyfo"]
+radius = 35.0
+height = 104.0
+
+[node name="platform_2d" type="CharacterBody2D" unique_id=1371415050]
+script = ExtResource("1_t6qm6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=161143026]
+position = Vector2(0, 14)
+shape = SubResource("CapsuleShape2D_y7ete")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=473717050]
+position = Vector2(0, 1)
+sprite_frames = SubResource("SpriteFrames_goveo")
+animation = &"crouch"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1239743903]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=744231061]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_4oyfo")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1290158380]
+position_smoothing_enabled = true
