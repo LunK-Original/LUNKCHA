@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNKCHA by LUNK — Free player controllers for Godot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --bg-raise:#141416;
+    --panel:#18181b;
+    --panel-border:#2a2a2e;
+    --text:#f2f2f3;
+    --text-dim:#9a9aa2;
+    --text-faint:#6b6b72;
+    --blue:#2f9bff;
+    --blue-deep:#0d6efd;
+    --kw:#c586c0; --type:#4ec9b0; --str:#ce9178; --fn:#dcdcaa; --vr:#9cdcfe; --cm:#6a9955;
+    --ok:#3ecf6e;
+    --radius-lg:16px;
+    --radius-md:10px;
+    --sans:'Inter', system-ui, sans-serif;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; border:none; cursor:pointer; }
+  ::selection{ background:#1d5fae; color:#fff; }
+  :focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+
+  .nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; gap:28px;
+    height:60px; padding:0 28px;
+    background:rgba(10,10,11,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-border);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:16px; letter-spacing:.2px; flex:1; }
+  .brand:hover{ opacity:.85; }
+  .brand-mark{ width:26px; height:26px; flex-shrink:0; }
+  .nav-right{ display:flex; align-items:center; gap:14px; }
+  .btn-download{
+    background:var(--blue); color:#fff; font-weight:600; font-size:14px;
+    padding:9px 18px; border-radius:8px; display:flex; align-items:center; gap:8px;
+    box-shadow:0 0 0 0 rgba(47,155,255,.5); transition:box-shadow .2s, background .2s;
+  }
+  .btn-download:hover{ background:var(--blue-deep); box-shadow:0 0 0 4px rgba(47,155,255,.18); }
+
+  .announce{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:10px 16px; font-size:13.5px; color:#cfe6ff;
+    background:linear-gradient(180deg,#0f1720,#0c0c0d);
+    border-bottom:1px solid var(--panel-border);
+    position:relative;
+  }
+  .announce a{ text-decoration:underline; font-weight:600; }
+  .announce .close{ position:absolute; right:18px; color:var(--text-faint); cursor:pointer; font-size:15px; }
+  .announce .close:hover{ color:#fff; }
+
+  .hero{
+    position:relative;
+    padding:96px 24px 48px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .binary-bg{
+    position:absolute; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><text x='4' y='18' font-family='monospace' font-size='13' fill='%232a2a30'>0 1 1 0 1</text><text x='2' y='40' font-family='monospace' font-size='13' fill='%232a2a30'>1 0 0 1 0</text><text x='6' y='62' font-family='monospace' font-size='13' fill='%232a2a30'>0 1 0 1 1</text><text x='0' y='84' font-family='monospace' font-size='13' fill='%23252529'>1 1 0 0 1</text><text x='4' y='106' font-family='monospace' font-size='13' fill='%232a2a30'>0 0 1 0 1</text><text x='2' y='128' font-family='monospace' font-size='13' fill='%23252529'>1 0 1 1 0</text><text x='6' y='150' font-family='monospace' font-size='13' fill='%232a2a30'>0 1 0 0 1</text><text x='0' y='172' font-family='monospace' font-size='13' fill='%23252529'>1 1 1 0 0</text></svg>");
+    background-repeat:repeat;
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 30%, #000 40%, transparent 90%);
+    opacity:.9;
+  }
+  .hero-inner{ position:relative; z-index:2; max-width:900px; margin:0 auto; }
+  .hero h1{
+    font-size:clamp(34px, 6vw, 68px);
+    font-weight:800;
+    line-height:1.08;
+    letter-spacing:-1.5px;
+    color:#fff;
+  }
+  .hero .sub{
+    margin-top:20px;
+    font-size:clamp(15px, 2vw, 20px);
+    color:var(--text-dim);
+    font-weight:400;
+  }
+
+  .hero-video{
+    margin:44px auto 0;
+    max-width:760px;
+    background:#0e0e10;
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7);
+    text-align:left;
+  }
+  .hero-video-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:9px 14px; background:#141416; border-bottom:1px solid var(--panel-border);
+    font-size:11.5px; color:var(--text-faint); font-family:var(--mono);
+  }
+  .hero-video-stage{
+    position:relative; aspect-ratio:16/9;
+    background:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:24px 24px; background-color:#0e0e10;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-video-stage video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-video-stage .play-badge{
+    position:absolute; width:64px; height:64px; border-radius:50%;
+    background:rgba(0,0,0,.45); border:1.5px solid rgba(255,255,255,.5);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    pointer-events:none; backdrop-filter:blur(2px);
+  }
+  .hero-video-stage .play-badge svg{ width:22px; height:22px; margin-left:3px; }
+
+  .dl-card{
+    margin:28px auto 0;
+    max-width:520px;
+    background:#f4f4f5;
+    color:#111;
+    border-radius:var(--radius-lg);
+    padding:26px 28px 20px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+  }
+  .dl-card .main-btn{
+    width:100%;
+    background:#0c0c0d; color:#fff;
+    font-size:16px; font-weight:700;
+    padding:15px 20px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition:transform .15s ease, background .15s;
+  }
+  .dl-card .main-btn:hover{ background:#000; transform:translateY(-1px); }
+  .dl-card .main-btn svg{ width:18px; height:18px; }
+  .dl-card .sub-links{ margin-top:14px; font-size:13.5px; color:#444; }
+  .dl-card .sub-links a{ text-decoration:underline; font-weight:600; color:#111; }
+  .dl-card .fine{ margin-top:10px; font-size:11.5px; color:#777; line-height:1.5; }
+  .dl-card .fine a{ text-decoration:underline; color:#555; }
+
+  .mockup-wrap{
+    position:relative;
+    max-width:1040px;
+    margin:70px auto 40px;
+    padding:0 24px 140px;
+  }
+  .mockup-main{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7);
+  }
+  .mockup-topbar{
+    height:34px;
+    background:linear-gradient(90deg,#1a5fbf,#2f9bff 60%, #57c2ff);
+    display:flex; align-items:center; padding:0 14px; gap:6px;
+  }
+  .mockup-topbar span{ width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.55); }
+  .mockup-body{ display:flex; min-height:290px; }
+  .mockup-tabs{
+    display:flex; border-bottom:1px solid var(--panel-border); background:#141416;
+  }
+  .mockup-editor{ flex:1.4; display:flex; flex-direction:column; min-width:0; }
+  .mtab{
+    font-family:var(--mono); font-size:12px; color:var(--text-faint);
+    padding:9px 14px; border-right:1px solid var(--panel-border);
+  }
+  .mtab.active{ color:#fff; background:var(--panel); }
+  .mockup-code{
+    font-family:var(--mono); font-size:12.5px; line-height:1.9;
+    padding:16px 18px; color:var(--text-dim);
+  }
+  .mockup-code .ln{ display:flex; gap:14px; }
+  .mockup-code .ln .no{ color:var(--text-faint); width:14px; text-align:right; flex-shrink:0; user-select:none; }
+  .mockup-side{
+    flex:1; border-left:1px solid var(--panel-border); background:#131315;
+    padding:16px 18px;
+  }
+  .mockup-side h4{
+    font-size:11px; letter-spacing:1px; color:var(--text-faint); text-transform:uppercase; margin-bottom:14px; font-weight:700;
+  }
+  .mockup-side .item{
+    display:flex; align-items:flex-start; gap:8px;
+    font-size:12.5px; color:#d6d6d9; margin-bottom:12px; line-height:1.5;
+  }
+  .mockup-side .item svg{ width:14px; height:14px; color:var(--ok); flex-shrink:0; margin-top:2px; }
+
+  .mockup-toast{
+    position:absolute;
+    right:0; bottom:0;
+    width:290px;
+    background:#1c1c20;
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    padding:14px 16px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
+    transform:translate(30px, 40px) rotate(-1.2deg);
+  }
+  .mockup-toast .row{ display:flex; align-items:center; gap:10px; }
+  .mockup-toast .ic{
+    width:32px; height:32px; border-radius:8px; background:rgba(62,207,110,.15);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .mockup-toast .ic svg{ width:16px; height:16px; color:var(--ok); }
+  .mockup-toast .title{ font-size:13px; font-weight:600; color:#fff; }
+  .mockup-toast .meta{ font-size:11.5px; color:var(--text-faint); font-family:var(--mono); margin-top:2px; }
+  .mockup-toast .folder-btn{
+    margin-top:10px; width:100%; text-align:center; font-size:12px; color:var(--blue);
+    padding:7px; border-radius:7px; background:rgba(47,155,255,.1);
+  }
+  .mockup-toast .folder-btn:hover{ background:rgba(47,155,255,.18); }
+
+  @media (max-width:760px){
+    .mockup-body{ flex-direction:column; }
+    .mockup-side{ border-left:none; border-top:1px solid var(--panel-border); }
+    .mockup-toast{ position:static; transform:none; margin:16px auto 0; width:100%; }
+    .mockup-wrap{ padding-bottom:24px; }
+  }
+
+  .section-head{
+    max-width:1040px; margin:0 auto; padding:0 24px;
+    text-align:center;
+  }
+  .section-head .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--blue); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;
+  }
+  .section-head h2{ font-size:clamp(26px,3.6vw,40px); font-weight:800; margin-top:10px; letter-spacing:-.5px; }
+  .section-head p{ color:var(--text-dim); margin-top:12px; font-size:15.5px; max-width:560px; margin-left:auto; margin-right:auto; }
+
+  .assets{
+    max-width:1040px; margin:56px auto 100px; padding:0 24px;
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .asset-card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:var(--radius-lg);
+    padding:28px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    align-items:center;
+  }
+  .asset-card:nth-child(even){ direction:rtl; }
+  .asset-card:nth-child(even) > *{ direction:ltr; }
+  .asset-info .tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11px; color:var(--type);
+    background:rgba(78,201,176,.1); border:1px solid rgba(78,201,176,.25);
+    padding:4px 10px; border-radius:20px; margin-bottom:14px;
+  }
+  .asset-info h3{ font-size:22px; font-weight:700; letter-spacing:-.3px; }
+  .asset-info p{ color:var(--text-dim); margin-top:10px; font-size:14.5px; line-height:1.7; }
+  .feat-list{ list-style:none; margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+  .feat-list li{ display:flex; gap:8px; align-items:flex-start; font-size:13.5px; color:#d6d6d9; }
+  .feat-list li svg{ width:14px; height:14px; color:var(--ok); flex-shrink:0; margin-top:3px; }
+
+  .dl-row{
+    margin-top:20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .dl-btn{
+    position:relative; overflow:hidden;
+    display:inline-flex; align-items:center; gap:10px;
+    background:#fff; color:#0c0c0d; font-weight:700; font-size:13.5px;
+    padding:12px 18px; border-radius:9px;
+  }
+  .dl-btn:hover{ background:#e9e9ea; }
+  .dl-btn svg{ width:15px; height:15px; }
+  .dl-btn .fill{ position:absolute; inset:0; background:rgba(47,155,255,.35); width:0%; transition:width .9s ease; }
+  .dl-btn.downloading .fill{ width:100%; }
+  .dl-meta{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
+
+  .preview-panel{
+    background:#0e0e10; border:1px solid var(--panel-border); border-radius:12px; overflow:hidden;
+  }
+  .preview-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:8px 12px; background:#141416; border-bottom:1px solid var(--panel-border);
+    font-size:11px; color:var(--text-faint); font-family:var(--mono);
+  }
+  .preview-stage{
+    position:relative; aspect-ratio:16/9;
+    background:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:22px 22px; background-color:#0e0e10;
+  }
+  .preview-stage video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  @media (max-width:760px){
+    .asset-card{ grid-template-columns:1fr; }
+    .asset-card:nth-child(even){ direction:ltr; }
+  }
+
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:#1c1c20; border:1px solid var(--panel-border);
+    padding:11px 18px; border-radius:10px; font-size:13px; color:#fff;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    z-index:300; box-shadow:0 20px 50px rgba(0,0,0,.5);
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast b{ color:var(--ok); }
+
+  .footer{
+    border-top:1px solid var(--panel-border);
+    padding:36px 24px; text-align:center; color:var(--text-faint); font-size:12.5px;
+  }
+  .footer a{ text-decoration:underline; }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">
+      LUNKCHA
+    </a>
+    <div class="nav-right">
+      <a class="btn-download" href="#download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
+        Download
+      </a>
+    </div>
+  </nav>
+
+  <div class="announce">
+    🎬 <a href="#assets">Watch a demo of each controller</a>
+    <span class="close" onclick="this.parentElement.style.display='none'">✕</span>
+  </div>
+
+  <section class="hero">
+    <div class="binary-bg"></div>
+    <div class="hero-inner">
+      <h1>The free Godot player controller kit</h1>
+      <p class="sub">Drop-in character movement for 2D and 3D — start your next project without writing a controller from scratch.</p>
+
+      <div class="hero-video">
+        <div class="hero-video-head"><span>▶ LUNKCHA</span><span>overview · 0:42</span></div>
+        <div class="hero-video-stage">
+          <video autoplay muted loop playsinline preload="auto" poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='960' height='540'><rect width='960' height='540' fill='%230e0e10'/><text x='480' y='275' font-family='monospace' font-size='18' fill='%23555' text-anchor='middle'>place the LUNKCHA overview video here</text></svg>">
+            <source src="/video/utama.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="dl-card" id="download">
+        <a href="https://github.com/LunK-Original/LUNKCHA/archive/LUNKCHA.zip" >
+          <button class="main-btn dl-btn">
+            <div class="fill"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
+            Download LUNKCHA
+          </button>
+        </a>
+        <div class="sub-links">
+          Includes 3 controllers at once. <a href="setup-guide.html">Read the setup guide →</a>
+        </div>
+        <div class="fine">Free forever · <a href="#">MIT License</a> · Made by LUNK · Requires Godot 4.2+</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mockup-wrap">
+    <div class="mockup-main">
+      <div class="mockup-topbar"><span></span><span></span><span></span></div>
+      <div class="mockup-body">
+        <div class="mockup-editor">
+          <div class="mockup-tabs">
+            <div class="mtab active">platformer_2d_controller.gd</div>
+            <div class="mtab">first_person_3d_controller.gd</div>
+          </div>
+          <div class="mockup-code">
+            <div class="ln"><span class="no">1</span><span><span style="color:var(--kw)">func</span> <span style="color:var(--fn)">_physics_process</span>(delta):</span></div>
+            <div class="ln"><span class="no">2</span><span>&nbsp;&nbsp;velocity.y += gravity * delta</span></div>
+            <div class="ln"><span class="no">3</span><span>&nbsp;&nbsp;<span style="color:var(--kw)">if</span> Input.is_action_just_pressed(<span style="color:var(--str)">"jump"</span>)</span></div>
+            <div class="ln"><span class="no">4</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--kw)">and</span> is_on_floor():</span></div>
+            <div class="ln"><span class="no">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;velocity.y = jump_force</span></div>
+            <div class="ln"><span class="no">6</span><span>&nbsp;&nbsp;move_and_slide()</span></div>
+          </div>
+        </div>
+        <div class="mockup-side">
+          <h4>What's inside</h4>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Coyote time & jump buffer</div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Wall slide & wall jump</div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Parameters exposed in the Inspector</div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Zero extra dependencies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup-toast">
+      <div class="row">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div>
+          <div class="title">Download complete</div>
+          <div class="meta">LUNKCHA.zip · 6.4 MB</div>
+        </div>
+      </div>
+      <div class="folder-btn">Show in folder</div>
+    </div>
+  </div>
+
+  <div class="section-head" id="assets">
+    <div class="eyebrow">v0.1.0 · Early Access</div>
+    <h2>3 controllers, in one download</h2>
+    <p>LUNKCHA.zip has everything: 2D, first person 3D, and third person 3D. Just extract, import into your project, and go.</p>
+  </div>
+
+  <div class="assets">
+
+    <div class="asset-card">
+      <div class="asset-info">
+        <span class="tag">● 2D · CharacterBody2D</span>
+        <h3>2D Platformer Controller</h3>
+        <p>A classic 2D controller that already feels "right" out of the box — run, jump, coyote time, all parameters exposed in the Inspector.</p>
+        <ul class="feat-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Coyote time & jump buffering</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Variable jump height</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Wall slide, wall jump & ledge grab</li>
+        </ul>
+      </div>
+      <div class="preview-panel">
+        <div class="preview-head"><span>▶ preview</span><span>platformer_2d_controller.gd</span></div>
+        <div class="preview-stage">
+          <video autoplay muted loop playsinline preload="none" poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='360'><rect width='640' height='360' fill='%230e0e10'/><text x='320' y='185' font-family='monospace' font-size='14' fill='%23555' text-anchor='middle'>place the demo video here</text></svg>">
+            <source src="/video/platform_2d.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-card">
+      <div class="asset-info">
+        <span class="tag">● 3D · CharacterBody3D</span>
+        <h3>First Person 3D Controller</h3>
+        <p>Walking, running, jumping, and look-around that already feel polished. Easy to extend for FPS or exploration games.</p>
+        <ul class="feat-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Mouse look + gamepad support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Sprint, crouch, jump smoothing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Automatic slope & stair handling</li>
+        </ul>
+      </div>
+      <div class="preview-panel">
+        <div class="preview-head"><span>▶ preview</span><span>first_person_3d_controller.gd</span></div>
+        <div class="preview-stage">
+          <video autoplay loop muted playsinline  preload="none" poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='360'><rect width='640' height='360' fill='%230e0e10'/><text x='320' y='185' font-family='monospace' font-size='14' fill='%23555' text-anchor='middle'>place the demo video here</text></svg>">
+            <source src="/video/first_person.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-card">
+      <div class="asset-info">
+        <span class="tag">● 3D · CharacterBody3D</span>
+        <h3>Third Person 3D Platformer Controller</h3>
+        <p>A finely tuned spring-arm camera: no wall clipping, no jerky motion. Perfect for 3D platformers, adventure, or action games.</p>
+        <ul class="feat-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Anti-clipping spring-arm camera</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Rotate-to-move & strafe mode</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Jump, double jump, coyote time</li>
+        </ul>
+      </div>
+      <div class="preview-panel">
+        <div class="preview-head"><span>▶ preview</span><span>third_person_3d_controller.gd</span></div>
+        <div class="preview-stage">
+          <video autoplay loop muted playsonline preload="none" poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='360'><rect width='640' height='360' fill='%230e0e10'/><text x='320' y='185' font-family='monospace' font-size='14' fill='%23555' text-anchor='middle'>place the demo video here</text></svg>">
+            <source src="/video/third_person.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    LUNKCHA by LUNK · v0.1.0 Early Access · Free & <a href="#">MIT licensed</a> · Made for the Godot community
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    function showToast(msg){
+      clearTimeout(toastTimer);
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+    document.querySelectorAll('.dl-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(btn.classList.contains('downloading')) return;
+        const file = btn.dataset.file;
+        btn.classList.add('downloading');
+        showToast('↓ Preparing <b>' + file + '</b>...');
+        setTimeout(() => {
+          showToast('<b>✓</b> ' + file + ' is ready to download');
+          btn.classList.remove('downloading');
+        }, 1300);
+      });
+    });
+  </script>
+</body>
+</html>
